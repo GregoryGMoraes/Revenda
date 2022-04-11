@@ -32,4 +32,28 @@ router.get("/pesquisar/:palavra", async (req, res) => {
     }
   });
 
+
+
+
+
+
+  // Método post é usado para inclusão
+router.post("/", async (req, res) => {
+     const { modelo , marca, ano, preco, revendedor_id } = req.body;
+     
+     // se algum dos campos não foi passado, irá enviar uma mensagem de erro e retornar
+     if (!modelo || !marca || !ano || !preco || !revendedor_id) {
+    res.status(400).json({ msg: "Enviar modelo, marca, ano, preço e revendedor_id do veículo" });
+     return;
+     }
+     
+    try {
+    // insert, faz a inserção na tabela carros (e retorna o id do registro inserido)
+     const novo = await dbKnex("carros").insert({ modelo, marca, ano, preco, revendedor_id });
+     res.status(201).json({ id: novo[0] }); // statusCode indica Create
+     } catch (error) {
+     res.status(400).json({ msg: error.message }); // retorna status de erro e msg
+     }
+     });
+
 module.exports = router;
