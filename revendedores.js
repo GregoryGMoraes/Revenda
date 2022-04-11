@@ -9,13 +9,13 @@ router.use(express.json());
 
 // método get é usado para consulta
 router.get("/", async (req, res) => {
-  try {
-    // para obter os revendedores pode-se utilizar .select().orderBy() ou apenas .orderBy()
-    const revendedores = await dbKnex("revendedores").orderBy("id", "nome");
-    res.status(200).json(revendedores); // retorna statusCode ok e os dados
-  } catch (error) {
-    res.status(400).json({ msg: error.message }); // retorna status de erro e msg
-  }
+    try {
+        // para obter os revendedores pode-se utilizar .select().orderBy() ou apenas .orderBy()
+        const revendedores = await dbKnex("revendedores").orderBy("id", "nome");
+        res.status(200).json(revendedores); // retorna statusCode ok e os dados
+    } catch (error) {
+        res.status(400).json({ msg: error.message }); // retorna status de erro e msg
+    }
 });
 
 // Método post é usado para inclusão
@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
     const { nome, contato } = req.body;
 
     // se algum dos campos não foi passado, irá enviar uma mensagem de erro e retornar
-    if ( !nome || !contato ) {
+    if (!nome || !contato) {
         res.status(400).json({ msg: "Enviar nome e contato do revendedor" });
         return;
     }
