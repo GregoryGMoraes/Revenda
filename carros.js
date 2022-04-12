@@ -64,7 +64,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 
-// método get usado para pesquisar pela palavra chave
+// Método get usado para pesquisar pela palavra chave
 router.get("/pesquisar/:palavra", async (req, res) => {
     const { palavra } = req.params;
     try {
@@ -72,6 +72,20 @@ router.get("/pesquisar/:palavra", async (req, res) => {
             .where("modelo", "like", `%${palavra}%`)
             .orWhere("marca", "like", `%${palavra}%`)
         res.status(200).json(carros); // retorna statusCode ok e os dados
+    } catch (error) {
+        res.status(400).json({ msg: error.message }); // retorna status de erro e msg
+    }
+});
+
+//Método get usado para média dos preços
+router.get("/media", async (req, res) => {
+    try {
+        const consultaCarros = await dbKnex("carros")
+            .count({ numCarros: "*" }) //Quantidade de carros
+            .sum({ total: "preco" })   //Preço total dos carros
+            .avg({ media: "preco" })   //Média de preço do carros 
+        const { numCarros, total, media } = consultaCarros[0];
+        res.status(200).json({ numCarros, total:Number(total.toFixed(2)), media:Number(media.toFixed(2)) }); // retorna statusCode ok e os dados
     } catch (error) {
         res.status(400).json({ msg: error.message }); // retorna status de erro e msg
     }
