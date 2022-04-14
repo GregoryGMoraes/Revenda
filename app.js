@@ -6,7 +6,7 @@ const carros = require("./carros")
 const revendedores = require("./revendedores")
 
 app.get('/', (req, res) => {
-    res.send('<h2>Seja Bem-vindo</h2>')
+    res.send('<h2>Sejam Bem-vindos</h2>')
 })
 
 app.use('/carros', carros);  // identificação da rota e da const (require) associada
