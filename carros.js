@@ -86,10 +86,23 @@ router.get("/media", async (req, res) => {
             .sum({ total: "preco" })   //Preço total dos carros
             .avg({ media: "preco" })   //Média de preço do carros 
         const { numCarros, total, media } = consultaCarros[0];
-        res.status(200).json({ numCarros, total:Number(total.toFixed(2)), media:Number(media.toFixed(2)) }); // retorna statusCode ok e os dados
+        res.status(200).json({ numCarros, total:Number(total).toFixed(2), media:Number(media).toFixed(2) }); // retorna statusCode ok e os dados
     } catch (error) {
         res.status(400).json({ msg: error.message }); // retorna status de erro e msg
     }
 });
+
+// Método get é usado para consulta
+router.get("/revendedores", async (req, res) => {
+
+    try {
+      const carros = await dbKnex("carros")
+        .select("carros.id", "modelo", "marca", "ano", "preco", "nome as nome_revendedor", "contato")
+        .innerJoin('revendedores', 'revendedor_id', 'revendedores.id');
+      res.status(200).json(carros); // retorna statusCode ok e os dados
+    } catch (error) {
+      res.status(400).json({ msg: error.message }); // retorna status de erro e msg
+    }
+  });
 
 module.exports = router;
